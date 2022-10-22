@@ -2,6 +2,7 @@ body {
   background: #2c2c2c;
 }
 
+/* Styles for aside panel */
 aside {
   float: left;
   background: #181818;
@@ -46,31 +47,46 @@ aside ul a {
 }
 
 aside ul li:hover,
-aside ul a:hover,
-main .features ul li:hover,
-main .features ul a:hover {
+aside ul a:hover {
   color: #eb5959;
   transform: scale(1.05);
 }
 
-main .features {
+/* Styles for .main-part div which contains block content */
+main .main-part {
   float: left;
   color: #fff;
+  width: 80%;
+
+}
+
+/* Styles for main app */
+main .main-app {
   margin-top: 100px;
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
-  width: 75%;
+  width: 95%;
 }
 
-main .features ul {
+main .main-app ul {
   list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-main .features ul a {
+main .main-app ul a {
   text-decoration: none;
 }
 
-main .features li {
+main .main-app li {
   color: #fff;
   font-size: 25px;
   transition: transform .3s ease;
+}
+
+main .main-app ul li:hover,
+main .main-app ul a:hover {
+  color: #eb5959;
+  transform: scale(1.05);
 }
