@@ -1,6 +1,100 @@
 {% extends 'main/layout.html' %}
 
+{% block title %}
+  <title>Network vs Atoll</title>
+{% endblock title %}
+
 {% block content %}
-  <h1>Network vs Atoll home page</h1>
+  <div class="nva-app">
+    <div id="nva-main-table" class="nva-table active-table">
+    <h1>Network vs Atoll Summary</h1>
+    <table class="table table-dark table-bordered">
+      <thead>
+        <th>Technology</th>
+        <th>Inconsistencies count</th>
+        <th>Go to details</th>
+      </thead>
+      <tbody>
+        {% for diff in summary %}
+          <tr>
+            <td>{{ diff.technology }}</td>
+            <td>{{ diff.count }}</td>
+            <td><button id="{{ diff.technology }}" class="btn btn-primary nva-details">Details</button></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+
+    <div id="GSM-block" class="nva-table hidden-table">
+      <button class="btn btn-secondary nva-home">Back to Summary</button>
+      <h1>GSM Inconsistencies</h1>
+      <table class="table table-dark table-bordered">
+        <thead>
+          <th>BSC</th>
+          <th>Inconsistencies count</th>
+          <th>Download</th>
+        </thead>
+        <tbody>
+          {% for bsc in GSM.summary %}
+            <tr>
+              <td>{{ bsc.bsc_name }}</td>
+              <td>{{ bsc.count }}</td>
+              <td><button class="btn btn-primary">Download</button></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div id="WCDMA-block" class="nva-table hidden-table">
+      <button class="btn btn-secondary nva-home">Back to Summary</button>
+      <h1>WCDMA Inconsistencies</h1>
+      <table class="table table-dark table-bordered">
+        <thead>
+          <th>RNC</th>
+          <th>Inconsistencies count</th>
+          <th>Download</th>
+        </thead>
+        <tbody>
+          {% for rnc in WCDMA.summary %}
+            <tr>
+              <td>{{ rnc.rnc_name }}</td>
+              <td>{{ rnc.count }}</td>
+              <td><button class="btn btn-primary">Download</button></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const detailBtns = document.getElementsByClassName('nva-details');
+    for (let btn of detailBtns) {
+      btn.addEventListener('click', () => {
+        const activeTable = document.getElementsByClassName('active-table')[0];
+        activeTable.classList.add('hidden-table');
+        activeTable.classList.remove('active-table');
+
+        const hiddenTable = document.getElementById(btn.id + '-block');
+        hiddenTable.classList.add('active-table');
+        hiddenTable.classList.remove('hidden-table');
+      });
+    }
+
+    const mainTable = document.getElementById('nva-main-table');
+    const nvaHomeBtns = document.getElementsByClassName('nva-home');
+    for (let btn of nvaHomeBtns) {
+      btn.addEventListener('click', () => {
+        const activeTable = document.getElementsByClassName('active-table')[0];
+        activeTable.classList.add('hidden-table');
+        activeTable.classList.remove('active-table');
+
+        mainTable.classList.add('active-table');
+        mainTable.classList.remove('hidden-table');
+      });
+    }
+  </script>
 
 {% endblock content %}
