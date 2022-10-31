@@ -36,11 +36,11 @@
           <th>Download</th>
         </thead>
         <tbody>
-          {% for bsc in GSM.summary %}
+          {% for bsc in gsm_details %}
             <tr>
               <td>{{ bsc.bsc_name }}</td>
               <td>{{ bsc.count }}</td>
-              <td><button class="btn btn-primary">Download</button></td>
+              <td><button id="{{ bsc.bsc_name }}" class="btn btn-primary gsm-bsc">Download</button></td>
             </tr>
           {% endfor %}
         </tbody>
@@ -93,6 +93,27 @@
 
         mainTable.classList.add('active-table');
         mainTable.classList.remove('hidden-table');
+      });
+    }
+
+    const gsmDownloadBtns = document.getElementsByClassName('gsm-bsc');
+    for (let btn of gsmDownloadBtns) {
+      btn.addEventListener('click', () => {
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>Loading...';
+        console.log(btn.id);
+        const formData = new FormData();
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        formData.append('bsc', btn.id);
+        fetch('{% url "nva-home" %}', {method: 'POST', body: formData})
+          .then(response => response.blob())
+          .then(data => {
+            const url = window.URL.createObjectURL(data);
+              const anchor = document.createElement("a");
+              anchor.href = url;
+              anchor.download = 'network-vs-atoll.xlsx';
+              anchor.click();
+              btn.innerHTML = 'Download';
+          });
       });
     }
   </script>

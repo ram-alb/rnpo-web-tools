@@ -9,6 +9,9 @@ packages = [{include = "rnpo_web_tools"}]
 [tool.poetry.dependencies]
 python = "3.8.2"
 Django = "^4.1.2"
+cx-Oracle = "^8.3.0"
+python-dotenv = "^0.21.0"
+openpyxl = "^3.0.10"
 
 
 [tool.poetry.group.dev.dependencies]
