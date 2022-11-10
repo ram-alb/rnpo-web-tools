@@ -67,6 +67,27 @@
         </tbody>
       </table>
     </div>
+
+    <div id="LTE-block" class="nva-table hidden-table">
+      <button class="btn btn-secondary nva-home">Back to Summary</button>
+      <h1>LTE Inconsistencies</h1>
+      <table class="table table-dark table-bordered">
+        <thead>
+          <th>Subnetwork</th>
+          <th>Inconsistencies count</th>
+          <th>Download</th>
+        </thead>
+        <tbody>
+          {% for subnetwork in lte_details %}
+            <tr>
+              <td>{{ subnetwork.subnetwork }}</td>
+              <td>{{ subnetwork.count }}</td>
+              <td><button id="{{ subnetwork.subnetwork }}" class="btn btn-primary lte-subnetwork">Download</button></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <script>

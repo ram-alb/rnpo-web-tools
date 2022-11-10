@@ -5,6 +5,7 @@ from django.shortcuts import render
 
 from .src.gsm.excel import fill_excel
 from .src.gsm.gsm_main import gsm_main
+from .src.lte.lte_main import lte_main
 
 
 def home(request):
@@ -17,15 +18,22 @@ def home(request):
     Returns:
         http response object
     """
+
     diffs = {
         'summary': [],
     }
     gsm_inconsistencies_count, summary_by_bsc, gsm_diff = gsm_main()
+    lte_inconsistencies_count, summary_by_subnetworks, lte_diff = lte_main()
     diffs['summary'].append({
         'technology': 'GSM',
         'count': gsm_inconsistencies_count,
     })
+    diffs['summary'].append({
+        'technology': 'LTE',
+        'count': lte_inconsistencies_count,
+    })
     diffs['gsm_details'] = summary_by_bsc
+    diffs['lte_details'] = summary_by_subnetworks
 
     if request.method == 'POST':
         bsc_name = request.POST.get('bsc')
