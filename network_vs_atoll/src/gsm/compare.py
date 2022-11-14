@@ -1,6 +1,9 @@
 """Compare parameters from the network with atoll parameters."""
 
 
+comma_separator = ', '
+
+
 def create_parameter_diff(row, parameter, network_value, atoll_value):
     """
     Create a dict with info about one parameter diff.
@@ -93,16 +96,16 @@ def compare_tch(diff, row):
     if row.tchfreqs is None:
         tch_list = ''
     else:
-        tch_list = row.tchfreqs.split(', ')
+        tch_list = row.tchfreqs.split(comma_separator)
         tch_list.append(str(row.bcch))
-        tch_list = ', '.join(sorted(tch_list))
+        tch_list = comma_separator.join(sorted(tch_list))
 
     if row.atoll_tchfreqs is None:
         atoll_tch_list = ''
     else:
         atoll_tchfreqs = row.atoll_tchfreqs.strip()
         atoll_tch_list = atoll_tchfreqs.split(' ')
-        atoll_tch_list = ', '.join(sorted(atoll_tch_list))
+        atoll_tch_list = comma_separator.join(sorted(atoll_tch_list))
 
     if tch_list != atoll_tch_list:
         diff.append(create_parameter_diff(row, 'tchfreqs', tch_list, atoll_tch_list))
@@ -120,8 +123,8 @@ def compare_maio(diff, row, atoll_maio_data):
     if row.maio is None:
         maio = ''
     else:
-        maio = row.maio.split(', ')
-        maio = ', '.join(sorted(maio))
+        maio = row.maio.split(comma_separator)
+        maio = comma_separator.join(sorted(maio))
 
     label = f'{row.cell}-{row.sitename}'
     try:
@@ -129,7 +132,7 @@ def compare_maio(diff, row, atoll_maio_data):
     except KeyError:
         atoll_maio = ''
     else:
-        atoll_maio = ', '.join([str(maio) for maio in atoll_maio])
+        atoll_maio = comma_separator.join([str(maio) for maio in atoll_maio])
 
     if maio != atoll_maio:
         diff.append(create_parameter_diff(row, 'maio', maio, atoll_maio))
@@ -170,10 +173,11 @@ def compare_gsm(atoll_cell_parameters, atoll_hsn, atoll_maio_data):
         bsc = row.bscname
         if bsc not in diff.keys():
             diff[bsc] = []
-        compare_common_parameters(diff[bsc], row)
-        compare_fband(diff[bsc], row)
-        compare_bsic(diff[bsc], row)
-        compare_tch(diff[bsc], row)
-        compare_maio(diff[bsc], row, atoll_maio_data)
-        compare_hsn(diff[bsc], row, atoll_hsn)
+        bsc_diff = diff[bsc]
+        compare_common_parameters(bsc_diff, row)
+        compare_fband(bsc_diff, row)
+        compare_bsic(bsc_diff, row)
+        compare_tch(bsc_diff, row)
+        compare_maio(bsc_diff, row, atoll_maio_data)
+        compare_hsn(bsc_diff, row, atoll_hsn)
     return diff

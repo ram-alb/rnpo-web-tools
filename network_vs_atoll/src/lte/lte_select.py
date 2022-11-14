@@ -31,14 +31,14 @@ def select_network_live_cells():
     row_factory = namedtuple(
         'NetworkCells',
         [
-        'subnetwork',
-        'sitename',
-        'eutrancell',
-        'tac',
-        'cellid',
-        'pci',
-        'earfcndl',
-        'rach',
+            'subnetwork',
+            'sitename',
+            'eutrancell',
+            'tac',
+            'cellid',
+            'pci',
+            'earfcndl',
+            'rach',
         ],
     )
 

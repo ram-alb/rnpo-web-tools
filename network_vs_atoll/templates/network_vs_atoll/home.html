@@ -26,68 +26,35 @@
     </table>
     </div>
 
-    <div id="GSM-block" class="nva-table hidden-table">
-      <button class="btn btn-secondary nva-home">Back to Summary</button>
-      <h1>GSM Inconsistencies</h1>
-      <table class="table table-dark table-bordered">
-        <thead>
-          <th>BSC</th>
-          <th>Inconsistencies count</th>
-          <th>Download</th>
-        </thead>
-        <tbody>
-          {% for bsc in gsm_details %}
-            <tr>
-              <td>{{ bsc.bsc_name }}</td>
-              <td>{{ bsc.count }}</td>
-              <td><button id="{{ bsc.bsc_name }}" class="btn btn-primary gsm-bsc">Download</button></td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+    {% for details_item in technology_details %}
+      <div id="{{ details_item.technology }}-block" class="nva-table hidden-table">
+        <button class="btn btn-secondary nva-home">Back to Summary</button>
+        <h1>{{ details_item.technology }} Inconsistencies</h1>
+        <table class="table table-dark table-bordered">
+          <thead>
+            {% if details_item.technology == 'GSM' %}
+              <th>BSC</th>
+            {% elif details_item.technology == 'LTE'%}
+              <th>Subnetwork</th>
+            {% elif details_item.technology == 'WCDMA'%}
+              <th>RNC</th>
+            {% endif %}
+            <th>Inconsistencies count</th>
+            <th>Download</th>
+          </thead>
+          <tbody>
+            {% for item in details_item.summary_by_nodes %}
+              <tr>
+                <td>{{ item.node }}</td>
+                <td>{{ item.count }}</td>
+                <td><button id="{{ details_item.technology }}-{{ item.node }}" class="btn btn-primary download-report">Download</button></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endfor %}
 
-    <div id="WCDMA-block" class="nva-table hidden-table">
-      <button class="btn btn-secondary nva-home">Back to Summary</button>
-      <h1>WCDMA Inconsistencies</h1>
-      <table class="table table-dark table-bordered">
-        <thead>
-          <th>RNC</th>
-          <th>Inconsistencies count</th>
-          <th>Download</th>
-        </thead>
-        <tbody>
-          {% for rnc in WCDMA.summary %}
-            <tr>
-              <td>{{ rnc.rnc_name }}</td>
-              <td>{{ rnc.count }}</td>
-              <td><button class="btn btn-primary">Download</button></td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-
-    <div id="LTE-block" class="nva-table hidden-table">
-      <button class="btn btn-secondary nva-home">Back to Summary</button>
-      <h1>LTE Inconsistencies</h1>
-      <table class="table table-dark table-bordered">
-        <thead>
-          <th>Subnetwork</th>
-          <th>Inconsistencies count</th>
-          <th>Download</th>
-        </thead>
-        <tbody>
-          {% for subnetwork in lte_details %}
-            <tr>
-              <td>{{ subnetwork.subnetwork }}</td>
-              <td>{{ subnetwork.count }}</td>
-              <td><button id="{{ subnetwork.subnetwork }}" class="btn btn-primary lte-subnetwork">Download</button></td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
   </div>
 
   <script>
@@ -117,14 +84,16 @@
       });
     }
 
-    const gsmDownloadBtns = document.getElementsByClassName('gsm-bsc');
-    for (let btn of gsmDownloadBtns) {
+    const downloadBtns = document.getElementsByClassName('download-report');
+    for (let btn of downloadBtns) {
       btn.addEventListener('click', () => {
         btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>Loading...';
         console.log(btn.id);
         const formData = new FormData();
         formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-        formData.append('bsc', btn.id);
+        const [technology, node] = btn.id.split('-');
+        formData.append('technology', technology);
+        formData.append('node', node);
         fetch('{% url "nva-home" %}', {method: 'POST', body: formData})
           .then(response => response.blob())
           .then(data => {

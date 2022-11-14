@@ -4,7 +4,16 @@ from openpyxl import Workbook
 from openpyxl.styles import Alignment
 
 
-def fill_excel(technology, node_diffs, node):
+def get_colums_by_technology(technology):
+    """
+    Return columns name according to technology.
+
+    Args:
+        technology: string
+
+    Returns:
+        list
+    """
     common_columns = [
         'Site',
         'Cell',
@@ -13,16 +22,31 @@ def fill_excel(technology, node_diffs, node):
         'Atoll value',
     ]
 
-    if technology == 'LTE':
-        columns = ['Subnetwork', *common_columns]
-    elif technology == 'WCDMA':
-        columns = ['RNC', *common_columns]
-    elif technology == 'GSM':
-        columns = ['BSC', *common_columns]
+    columns_by_technology = {
+        'LTE': ['Subnetwork', *common_columns],
+        'WCDMA': ['RNC', *common_columns],
+        'GSM': ['BSC', *common_columns],
+    }
 
+    return columns_by_technology[technology]
+
+
+def fill_excel(technology, node_diffs, node):
+    """
+    Fill excel file with inconsistencies.
+
+    Args:
+        technology: string
+        node_diffs: dict
+        node: string
+
+    Returns:
+        string
+    """
     work_book = Workbook()
     sheet = work_book.active
 
+    columns = get_colums_by_technology(technology)
     for col in columns:
         current_cell = sheet.cell(row=1, column=columns.index(col) + 1)
         current_cell.value = col
