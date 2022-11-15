@@ -2,6 +2,7 @@
 
 from openpyxl import Workbook
 from openpyxl.styles import Alignment
+from openpyxl.utils import get_column_letter
 
 
 def get_colums_by_technology(technology):
@@ -48,9 +49,11 @@ def fill_excel(technology, node_diffs, node):
 
     columns = get_colums_by_technology(technology)
     for col in columns:
-        current_cell = sheet.cell(row=1, column=columns.index(col) + 1)
+        col_number = columns.index(col) + 1
+        current_cell = sheet.cell(row=1, column=col_number)
         current_cell.value = col
         current_cell.alignment = Alignment(horizontal='center')
+        sheet.column_dimensions[get_column_letter(col_number)].width = 30
 
     row = 2
     for diff in node_diffs:
