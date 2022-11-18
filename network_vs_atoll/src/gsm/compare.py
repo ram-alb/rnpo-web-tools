@@ -44,8 +44,8 @@ def compare_common_parameters(diff, row):
     ]
     row_as_dict = row._asdict()
     for parameter in common_parameters:
-        network_value = str(row_as_dict[parameter])
-        atoll_value = str(row_as_dict[f'atoll_{parameter}'])
+        network_value = str(row_as_dict[parameter]).replace(',', '')
+        atoll_value = str(row_as_dict[f'atoll_{parameter}']).replace(',', '')
         if network_value == atoll_value:
             continue
         diff.append(create_parameter_diff(row, parameter, network_value, atoll_value))
