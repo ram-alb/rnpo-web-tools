@@ -12,10 +12,14 @@ Django = "^4.1.2"
 cx-Oracle = "^8.3.0"
 python-dotenv = "^0.21.0"
 openpyxl = "^3.0.10"
+django-crispy-forms = "^1.14.0"
+crispy-bootstrap5 = "^0.7"
+enm-client-scripting = {path = "local_packages/enm_client_scripting-1.20.1-py2.py3-none-any.whl"}
 
 
 [tool.poetry.group.dev.dependencies]
 wemake-python-styleguide = "^0.17.0"
+ipython = "^8.6.0"
 
 [build-system]
 requires = ["poetry-core"]

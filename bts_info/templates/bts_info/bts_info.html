@@ -1,0 +1,78 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}
+  <title>BTS Info</title>
+{% endblock title %}
+
+{% block content %}
+  <div class="bts-info-app">
+    <h1>BTS Info</h1>
+    <div id='form'>
+    <form method="post">
+      {% csrf_token %}
+      <div class="row">
+        <div id="input-col" class="col-auto">
+          {{ form }}
+          <div class="invalid-feedback">
+            Please enter only numbers!
+          </div>
+        </div>
+        <div class="col-auto">
+          <button id="btn" type="submit" class="btn btn-primary form-control" disabled>Find Site</button>
+        </div>
+      </div>
+    </form>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div id='message-div' class="alert alert-danger mt-4" role="alert">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+    </div>
+
+    {% if sites %}
+      <table class="table table-dark table-bordered table-striped mt-4">
+        <thead>
+          {% for header in sites.0.keys %}
+            <th>{{ header }}</th>
+          {% endfor %}
+        </thead>
+        <tbody>
+          {% for site in sites %}
+            <tr>
+              {% for item_value in site.values %}
+                <td>{{ item_value }}</td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+  </div>
+  <script>
+    const input = document.getElementById('input-field');
+    const btn = document.getElementById('btn');
+
+    input.addEventListener('input', () => {
+      const inputVal = input.value;
+
+      if (isNaN(inputVal)) {
+        input.classList.add('is-invalid');
+      } else {
+        input.classList.remove('is-invalid');
+        if (inputVal.length === 5) {
+          btn.disabled = false;
+        } else {
+          btn.disabled = true;
+        }
+      }
+    });
+
+    btn.addEventListener('click', () => {
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>Loading...';
+    })
+
+  </script>
+{% endblock content %}

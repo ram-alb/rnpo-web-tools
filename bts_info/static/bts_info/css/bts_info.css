@@ -1,0 +1,22 @@
+/* styles for bts_info app */
+.bts-info-app {
+  margin-top: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  width: 95%;
+}
+
+.bts-info-app #form {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.bts-info-app table {
+  font-size: small;
+}
+
+.bts-info-app table th {
+  font-size: medium;
+}
