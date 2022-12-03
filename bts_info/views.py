@@ -21,10 +21,11 @@ def bts_info(request):
         form = BtsIdForm(request.POST)
         if form.is_valid():
             bts_id = form.cleaned_data['bts_id']
-            sites = lte_main(bts_id)
+            sites, sector_polygons = lte_main(bts_id)
             context = {
                 'sites': sites,
                 'form': BtsIdForm(),
+                'sector_polygons': sector_polygons,
             }
             if sites:
                 context['latitude'] = sites[0]['latitude']

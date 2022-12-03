@@ -81,12 +81,21 @@
     // Creating map options
     const mapOptions = {
       center: [{{ latitude }}, {{ longitude }}],
-      zoom: 12
+      zoom: 14
     }
 
     // Creating a map object
     const map = new L.map('map', mapOptions);
-    const marker = L.marker([{{ latitude }}, {{ longitude }}]).addTo(map);
+    // const marker = L.marker([{{ latitude }}, {{ longitude }}]).addTo(map);
+
+    {% for polygon in sector_polygons %}
+      var polygon = L.polygon([
+        [{{ polygon.point0.0 }}, {{ polygon.point0.1 }}],
+        [{{ polygon.point1.0 }}, {{ polygon.point1.1 }}],
+        [{{ polygon.point2.0 }}, {{ polygon.point2.1 }}]
+      ], {color: 'red'}).addTo(map);
+    {% endfor %}
+
 
     // Creating a Layer object
     const layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
