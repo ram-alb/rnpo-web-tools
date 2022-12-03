@@ -22,9 +22,17 @@ def bts_info(request):
         if form.is_valid():
             bts_id = form.cleaned_data['bts_id']
             sites = lte_main(bts_id)
-            if not sites:
+            context = {
+                'sites': sites,
+                'form': BtsIdForm(),
+            }
+            if sites:
+                context['latitude'] = sites[0]['latitude']
+                context['longitude'] = sites[0]['longitude']
+            else:
                 messages.error(request, f'Site with id {bts_id} was not found')
-            return render(request, 'bts_info/bts_info.html', {'sites': sites, 'form': BtsIdForm()})
+
+            return render(request, 'bts_info/bts_info.html', context)
 
     form = BtsIdForm()
     return render(request, 'bts_info/bts_info.html', {'form': form})

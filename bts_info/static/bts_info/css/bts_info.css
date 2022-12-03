@@ -20,3 +20,10 @@
 .bts-info-app table th {
   font-size: medium;
 }
+
+.bts-info-app #map {
+  width: 700px;
+  height: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}

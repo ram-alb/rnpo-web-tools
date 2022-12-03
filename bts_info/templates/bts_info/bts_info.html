@@ -49,7 +49,10 @@
           {% endfor %}
         </tbody>
       </table>
+
+      <div id="map" class="mt-4 mb-4"></div>
     {% endif %}
+
   </div>
   <script>
     const input = document.getElementById('input-field');
@@ -72,7 +75,24 @@
 
     btn.addEventListener('click', () => {
       btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>Loading...';
-    })
+    });
+
+
+    // Creating map options
+    const mapOptions = {
+      center: [{{ latitude }}, {{ longitude }}],
+      zoom: 12
+    }
+
+    // Creating a map object
+    const map = new L.map('map', mapOptions);
+    const marker = L.marker([{{ latitude }}, {{ longitude }}]).addTo(map);
+
+    // Creating a Layer object
+    const layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+
+    // Adding layer to the map
+    map.addLayer(layer);
 
   </script>
 {% endblock content %}
