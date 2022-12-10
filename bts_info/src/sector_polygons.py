@@ -15,10 +15,17 @@ def make_sector_polygons(atoll_site_data, technology):
         list: a list of dicts with coordinates to draw antenna direction
     """
     dist = {
-        'GSM': 0.3,
-        'UMTS': 0.27,
-        'LTE': 0.24,
-        'NR': 0.21,
+        'GSM': 0.4,
+        'WCDMA': 0.3,
+        'LTE': 0.2,
+        'NR': 0.1,
+    }
+
+    colors = {
+        'GSM': 'green',
+        'WCDMA': 'red',
+        'LTE': 'yellow',
+        'NR': 'blue',
     }
 
     sector_points = []
@@ -40,6 +47,7 @@ def make_sector_polygons(atoll_site_data, technology):
                 'point0': base_point,
                 'point1': (point1.latitude, point1.longitude),
                 'point2': (point2.latitude, point2.longitude),
+                'color': colors[technology],
             },
         )
 

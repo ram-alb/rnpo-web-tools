@@ -4,7 +4,9 @@ from django.contrib import messages
 from django.shortcuts import render
 
 from .forms import BtsIdForm
+from .src.gsm.gsm_main import gsm_main
 from .src.lte.lte_main import lte_main
+from .src.wcdma.wcdma_main import wcdma_main
 
 
 def bts_info(request):
@@ -21,11 +23,18 @@ def bts_info(request):
         form = BtsIdForm(request.POST)
         if form.is_valid():
             bts_id = form.cleaned_data['bts_id']
-            sites, sector_polygons = lte_main(bts_id)
+            gsm_site, gsm_sector_polygons = gsm_main(bts_id)
+            lte_site, lte_sector_polygons = lte_main(bts_id)
+            wcdma_site, wcdma_sector_polygons = wcdma_main(bts_id)
+            sites = [*gsm_site, *wcdma_site, *lte_site]
             context = {
                 'sites': sites,
                 'form': BtsIdForm(),
-                'sector_polygons': sector_polygons,
+                'sector_polygons': [
+                    *gsm_sector_polygons,
+                    *wcdma_sector_polygons,
+                    *lte_sector_polygons,
+                ],
             }
             if sites:
                 context['latitude'] = sites[0]['latitude']

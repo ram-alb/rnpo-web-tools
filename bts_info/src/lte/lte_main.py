@@ -15,7 +15,6 @@ def lte_main(site_id):
 
     Returns:
         list: a list of dicts with LTE cells data
-
     """
     lte_enm_cli = make_lte_enm_cli(site_id)
     enm_tx_data = lte_enm_cli.execute_cmedit_get_command('SectorCarrier')

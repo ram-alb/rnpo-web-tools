@@ -1,13 +1,13 @@
-"""Make Atoll instance for working with Atoll LTE data."""
+"""Make Atoll instance for working with Atoll WCDMA data."""
 
 from collections import namedtuple
 
 from utils.atoll import Atoll
 
 
-def make_lte_atoll(site_id):
+def make_wcdma_atoll(site_id):
     """
-    Make Atoll instance for working with Atoll LTE data.
+    Make Atoll instance for working with Atoll WCDMA data.
 
     Args:
         site_id (str): 5 digits string
@@ -15,9 +15,9 @@ def make_lte_atoll(site_id):
     Returns:
         Atoll instance
     """
-    select_lte_site = """
+    select_wcdma_site = """
         SELECT
-            s.lte_sitename as site_name,
+            t.site_name,
             c.cell_id,
             s.latitude,
             s.longitude,
@@ -25,24 +25,22 @@ def make_lte_atoll(site_id):
             t.height,
             t.azimut,
             t.fband,
-            s.lte_region
+            c.rnc_name
         FROM
-            atoll_mrat.sites s
-        INNER JOIN
-            atoll_mrat.xgtransmitters t
-            ON s.name = t.site_name
-        INNER JOIN
-            atoll_mrat.xgcellslte c
-            ON t.tx_id = c.tx_id
+            atoll_mrat.utransmitters t
+            JOIN atoll_mrat.ucells c
+                ON t.tx_id = c.tx_id
+            JOIN atoll_mrat.sites s
+                ON t.site_name = s.name
         WHERE
             t.active = -1
-            AND s.lte_sitename LIKE :site_id
+            AND t.site_name LIKE :site_id
         ORDER BY
             c.cell_id
     """
 
     row_factory = namedtuple(
-        'AtollLteSite',
+        'AtollWcdmaSite',
         [
             'site',
             'cell',
@@ -56,10 +54,9 @@ def make_lte_atoll(site_id):
         ],
     )
 
-    sql_params = {'site_id': f'%{site_id}%'}
+    sql_params = {'site_id': f'{site_id}%'}
 
     sql_commands = {
-        'select_lte_site': (select_lte_site, sql_params, row_factory),
+        'select_wcdma_site': (select_wcdma_site, sql_params, row_factory),
     }
-
     return Atoll(sql_commands)
